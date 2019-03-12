@@ -7,8 +7,10 @@ Created on Mon Feb 18 12:51:47 2019
 import pandas as pd
 import numpy as np
 
+#importing the data in a pandas data frame
 df=pd.read_excel("CreditHistory_Clean.xlsx")
 
+#defining a function to encode categorical variables
 def my_encoder(z):
     for i in z:
         a=df[i][df[i].notnull()].unique()
@@ -18,7 +20,7 @@ def my_encoder(z):
 categorical = ['checking','coapp','depends','employed','existcr','foreign','history','housing','installp','job','marital','other','property','purpose','resident','savings','telephon']
 my_encoder(categorical)
 
-df= df.drop(columns=categorical)
+df= df.drop(columns=categorical)  # dropping the old columns which have already been encoded
 
 X= np.asarray(df.drop(columns="good_bad"))
 Y= df["good_bad"]
@@ -30,10 +32,8 @@ score_list=['recall','accuracy','precision','f1']
 network_list = [(3),(11),(5,4),(6,5),(7,6),(8,7)]
 
 Table = pd.DataFrame(index=range(6),columns= score_list)
-from sklearn.neural_network import MLPClassifier
-
-
-
+from sklearn.neural_network import MLPClassifier      # using MLP Classifier from sklearn.neuralnetwork to fit an Artificial Neural Network
+#using Cross Validation to get the most optimum network configuration from a network of list  
 k=0
 for nn in network_list:
     fnn= MLPClassifier(hidden_layer_sizes=nn, activation='relu', solver='lbfgs', max_iter=2000, random_state=123)
